@@ -32,11 +32,12 @@ class StudentModal extends React.Component {
       school: this.getSchoolFromUsername(this.props.student.login),
     });
 
-    this.props.studentRepo
-      .getNotesForStudent(this.props.student.login)
-      .then((data) => {
+    this.props.studentRepo.getNotesForStudent(
+      this.props.student.login,
+      (data) => {
         this.setState(data);
-      });
+      }
+    );
   }
 
   getProjectsOnline() {
@@ -123,6 +124,20 @@ class StudentModal extends React.Component {
       });
   }
 
+  getLeaveNoteButton() {
+    return (
+      <div
+        className="btn btn-primary m-1 w-100"
+        rel="noopener noreferrer"
+        onClick={() => {
+          this.props.onLeaveNoteClicked(this.props.student.login);
+        }}
+      >
+        Leave Note
+      </div>
+    );
+  }
+
   getStudentColumn(school) {
     return (
       <div>
@@ -155,6 +170,8 @@ class StudentModal extends React.Component {
         <hr />
         <h3 className="font-weight-light">Average Score</h3>
         {this.state.averageHomeworkScore}
+        <hr />
+        {this.getLeaveNoteButton()}
       </div>
     );
   }

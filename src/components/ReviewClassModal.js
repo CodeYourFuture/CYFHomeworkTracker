@@ -46,7 +46,11 @@ class ReviewClassModal extends React.Component {
           : this.state.students[studentName].noteValue;
 
       if (noteValue !== undefined) {
-        this.props.studentRepo.postStudentNote(githubName, noteValue);
+        this.props.studentRepo
+          .postStudentNote(githubName, noteValue)
+          .then(() => {
+            console.log("Note Posted");
+          });
       }
     });
   }

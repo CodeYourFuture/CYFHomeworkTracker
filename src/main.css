@@ -45,6 +45,11 @@ body {
   overflow-x: hidden;
 }
 
+.ql-editor {
+  min-height: 100px !important;
+  width: 100%;
+}
+
 .buttonLikeLink {
   background: none !important;
   border: none;

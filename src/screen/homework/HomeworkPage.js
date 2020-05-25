@@ -148,7 +148,7 @@ class HomeworkPage extends React.Component {
               }}
             />
             <GiveGradeModal
-              studentRepository={this.studentRepo}
+              studentRepo={this.studentRepo}
               studentName={this.state.gradeModal.studentName}
               showModal={this.state.gradeModal.show}
               token={this.githubRepo.getToken()}

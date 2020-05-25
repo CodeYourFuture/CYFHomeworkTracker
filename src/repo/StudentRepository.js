@@ -6,8 +6,8 @@ class StudentRepository {
   }
 
   postStudentNote(githubName, note) {
-    this.getStudentDetailsByName(githubName).then((snapshot) => {
-      snapshot.ref
+    return this.getStudentDetailsByName(githubName).then((snapshot) => {
+      return snapshot.ref
         .collection("notes")
         .doc()
         .set({ created: Date.now(), note: note });
@@ -49,24 +49,22 @@ class StudentRepository {
     return this.firebase.getStudentsInSchool(schoolName).get();
   }
 
-  getNotesForStudent() {
-    return this.props.studentRepo
-      .getStudentDetailsByName(this.props.student.login)
-      .then((student) => {
-        return student.ref
-          .collection("notes")
-          .get()
-          .then((query) => {
-            let data = query.docs.map((doc) => {
-              return doc.data();
-            });
-
-            return {
-              studentInfo: student.data(),
-              studentNotes: data,
-            };
+  getNotesForStudent(login, onNotesRetrieved) {
+    this.getStudentDetailsByName(login).then((student) => {
+      student.ref
+        .collection("notes")
+        .orderBy("created", "desc")
+        .onSnapshot((query) => {
+          let data = query.docs.map((doc) => {
+            return doc.data();
           });
-      });
+
+          onNotesRetrieved({
+            studentInfo: student.data(),
+            studentNotes: data,
+          });
+        });
+    });
   }
 
   getAllHomework(school) {

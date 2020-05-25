@@ -4,6 +4,7 @@ import cityConfig from "../../config/CityConfig.js";
 import { withRouter } from "react-router-dom";
 import cookie from "react-cookies";
 import StudentModal from "../../components/StudentModal";
+import LeaveNoteModal from "../../components/LeaveNoteModal";
 import ReviewClassModal from "../../components/ReviewClassModal";
 import Sidebar from "../../components/Sidebar";
 
@@ -16,6 +17,7 @@ class StudentPage extends React.Component {
       showOnboarding: false,
       studentModal: { show: false, student: {} },
       reviewClassModal: { show: false },
+      leaveNoteModal: { show: false },
       isMentor: true,
     };
 
@@ -99,6 +101,15 @@ class StudentPage extends React.Component {
     });
   }
 
+  showLeaveNoteModal(login) {
+    this.setState({
+      leaveNoteModal: {
+        show: true,
+        studentName: login,
+      },
+    });
+  }
+
   getBlockedView() {
     return (
       <div className="container">
@@ -135,11 +146,26 @@ class StudentPage extends React.Component {
                   showModal={this.state.studentModal.show}
                   pullRequestData={this.state.data}
                   studentRepo={this.studentRepo}
+                  onLeaveNoteClicked={(studentName) => {
+                    this.showLeaveNoteModal(studentName);
+                  }}
                   closeModal={() => {
                     this.setState({
                       studentModal: {
                         show: false,
-                        student: this.state.studentModal.student,
+                        student: {},
+                      },
+                    });
+                  }}
+                />
+                <LeaveNoteModal
+                  studentName={this.state.leaveNoteModal.studentName}
+                  showModal={this.state.leaveNoteModal.show}
+                  studentRepo={this.studentRepo}
+                  closeModal={() => {
+                    this.setState({
+                      leaveNoteModal: {
+                        show: false,
                       },
                     });
                   }}
