@@ -83,13 +83,7 @@ class HomeworkTable extends React.Component {
       field: "user.login",
       render: (rowData) => {
         return (
-          <button
-            className="buttonLikeLink"
-            href="#"
-            onClick={() => {
-              this.props.onStudentClicked(rowData.user.login);
-            }}
-          >
+          <button className="buttonLikeLink" href="#">
             {rowData.user.login}
           </button>
         );

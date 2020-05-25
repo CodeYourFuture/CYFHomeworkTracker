@@ -139,6 +139,21 @@ class ReviewModal extends React.Component {
     );
   }
 
+  getGradeForWorkButton() {
+    return (
+      <div
+        className="btn btn-primary m-1 min-200"
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={() => {
+          this.props.onGiveGradeClicked(this.props.pullRequest.head.user.login);
+        }}
+      >
+        Give Grade
+      </div>
+    );
+  }
+
   getPullBody() {
     return this.props.pullRequest.body.replace(/\n/gi, "\n\n");
   }
@@ -190,6 +205,7 @@ class ReviewModal extends React.Component {
                   {this.getGitCommandButton()}
                   {this.getViewSourceButton()}
                   {this.getViewStudentButton()}
+                  {this.getGradeForWorkButton()}
                 </div>
               </div>
             </div>

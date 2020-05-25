@@ -8,6 +8,7 @@ import cookie from "react-cookies";
 import ReviewModal from "../../components/ReviewModal";
 import OnboardingModal from "../../components/OnboardingModal";
 import Sidebar from "../../components/Sidebar";
+import GiveGradeModal from "../../components/GiveGradeModal";
 
 class HomeworkPage extends React.Component {
   constructor(props) {
@@ -16,7 +17,7 @@ class HomeworkPage extends React.Component {
       isLoading: false,
       data: [],
       showOnboarding: false,
-      studentModal: { show: false, student: {} },
+      gradeModal: { show: false },
       reviewModal: { show: false, pullRequest: {} },
     };
 
@@ -46,7 +47,6 @@ class HomeworkPage extends React.Component {
         if (user) {
           this.githubRepo.setToken().then((u) => {
             this.loadHomeworkRepos();
-            this.setStudentFromParams();
           });
         } else {
           history.replace(process.env.PUBLIC_URL + "/login");
@@ -59,14 +59,6 @@ class HomeworkPage extends React.Component {
         console.log(error);
       }
     );
-  }
-
-  setStudentFromParams() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const student = urlParams.get("student");
-    if (student !== null) {
-      this.onStudentClicked(student);
-    }
   }
 
   loadHomeworkRepos() {
@@ -109,15 +101,6 @@ class HomeworkPage extends React.Component {
     this.setState({ showOnboarding: true });
   }
 
-  onStudentClicked(studentName) {
-    this.githubRepo.getStudent(studentName).then((student) => {
-      console.log(student.data);
-      this.setState({
-        studentModal: { show: true, student: student.data },
-      });
-    });
-  }
-
   onReviewClicked(pullRequest) {
     if (cookie.load("onboardingShown") === false) {
       this.showOnboarding();
@@ -125,6 +108,12 @@ class HomeworkPage extends React.Component {
 
     this.setState({
       reviewModal: { show: true, pullRequest: pullRequest },
+    });
+  }
+
+  onGiveGradeClicked(studentName) {
+    this.setState({
+      gradeModal: { show: true, studentName: studentName },
     });
   }
 
@@ -145,15 +134,29 @@ class HomeworkPage extends React.Component {
               pullRequest={this.state.reviewModal.pullRequest}
               token={this.githubRepo.getToken()}
               school={this.state.school}
-              onViewStudentClicked={(studentName) => {
+              onGiveGradeClicked={(studentName) => {
                 console.log(studentName);
-                this.onStudentClicked(studentName);
+                this.onGiveGradeClicked(studentName);
               }}
               closeModal={() => {
                 this.setState({
                   reviewModal: {
                     show: false,
                     pullRequest: this.state.reviewModal.pullRequest,
+                  },
+                });
+              }}
+            />
+            <GiveGradeModal
+              studentRepository={this.studentRepo}
+              studentName={this.state.gradeModal.studentName}
+              showModal={this.state.gradeModal.show}
+              token={this.githubRepo.getToken()}
+              school={this.state.school}
+              closeModal={() => {
+                this.setState({
+                  gradeModal: {
+                    show: false,
                   },
                 });
               }}
@@ -224,9 +227,6 @@ class HomeworkPage extends React.Component {
                     token={this.githubRepo.getToken()}
                     onReviewClicked={(pullRequest) => {
                       this.onReviewClicked(pullRequest);
-                    }}
-                    onStudentClicked={(githubLogin) => {
-                      this.onStudentClicked(githubLogin);
                     }}
                   />
                 </div>

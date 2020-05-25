@@ -14,8 +14,59 @@ class StudentRepository {
     });
   }
 
+  postStudentHomework(githubName, note, grade, week) {
+    let noteFull = `This student's homework for <b>${week}</b> has been graded. They received a grade of <b>${grade}/10</b>.`;
+
+    if (note !== undefined && note.length !== 0) {
+      noteFull =
+        noteFull +
+        `<br/><br/>The reviewer said<br /><div class="code">${note}</div>`;
+    }
+
+    return this.getStudentDetailsByName(githubName)
+      .then((snapshot) => {
+        snapshot.ref
+          .collection("notes")
+          .doc()
+          .set({ created: Date.now(), note: noteFull });
+      })
+      .then(() => {
+        return this.getStudentDetailsByName(githubName).then((snapshot) => {
+          snapshot.ref
+            .collection("homework")
+            .doc(week)
+            .set({
+              created: Date.now(),
+              note: noteFull,
+              week: week,
+              result: parseFloat(grade),
+            });
+        });
+      });
+  }
+
   getStudentsFromSchool(schoolName) {
     return this.firebase.getStudentsInSchool(schoolName).get();
+  }
+
+  getNotesForStudent() {
+    return this.props.studentRepo
+      .getStudentDetailsByName(this.props.student.login)
+      .then((student) => {
+        return student.ref
+          .collection("notes")
+          .get()
+          .then((query) => {
+            let data = query.docs.map((doc) => {
+              return doc.data();
+            });
+
+            return {
+              studentInfo: student.data(),
+              studentNotes: data,
+            };
+          });
+      });
   }
 
   getAllHomework(school) {

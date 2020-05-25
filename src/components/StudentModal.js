@@ -33,21 +33,9 @@ class StudentModal extends React.Component {
     });
 
     this.props.studentRepo
-      .getStudentDetailsByName(this.props.student.login)
-      .then((student) => {
-        student.ref
-          .collection("notes")
-          .get()
-          .then((query) => {
-            let data = query.docs.map((doc) => {
-              return doc.data();
-            });
-
-            this.setState({
-              studentInfo: student.data(),
-              studentNotes: data,
-            });
-          });
+      .getNotesForStudent(this.props.student.login)
+      .then((data) => {
+        this.setState(data);
       });
   }
 
