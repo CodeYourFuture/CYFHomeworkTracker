@@ -16,7 +16,16 @@ class ReviewModal extends React.Component {
   }
 
   closeModal() {
-    this.props.closeModal();
+    if (this.state.noteValue === undefined) {
+      this.props.closeModal();
+    } else {
+      var result = window.confirm(
+        "Are you sure you want to close this screen? Everything will be lost."
+      );
+      if (result) {
+        this.props.closeModal();
+      }
+    }
   }
 
   handleChange(event) {
@@ -39,7 +48,7 @@ class ReviewModal extends React.Component {
         this.state.week
       )
       .then(() => {
-        this.closeModal();
+        this.props.closeModal();
       });
   }
 

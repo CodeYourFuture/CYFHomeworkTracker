@@ -24,7 +24,16 @@ class ReviewClassModal extends React.Component {
   }
 
   closeModal() {
-    this.props.closeModal();
+    if (Object.keys(this.state.students).length === 0) {
+      this.props.closeModal();
+    } else {
+      var result = window.confirm(
+        "Are you sure you want to close this screen? Everything will be lost."
+      );
+      if (result) {
+        this.props.closeModal();
+      }
+    }
   }
 
   handleChange(studentName, contents) {
@@ -37,21 +46,33 @@ class ReviewClassModal extends React.Component {
   }
 
   submitNotes() {
-    this.state.data.forEach((doc) => {
-      let githubName = doc.data().githubName;
-      let studentName = doc.data().name;
-      let noteValue =
-        this.state.students[studentName] === undefined
-          ? undefined
-          : this.state.students[studentName].noteValue;
+    this.setState({ loading: true });
 
-      if (noteValue !== undefined) {
-        this.props.studentRepo
-          .postStudentNote(githubName, noteValue)
-          .then(() => {
-            console.log("Note Posted");
-          });
-      }
+    let promises = this.state.data
+      .map((doc) => {
+        let githubName = doc.data().githubName;
+        let studentName = doc.data().name;
+        let noteValue =
+          this.state.students[studentName] === undefined
+            ? undefined
+            : this.state.students[studentName].noteValue;
+
+        if (noteValue !== undefined) {
+          return this.props.studentRepo
+            .postStudentNote(githubName, noteValue)
+            .then(() => {
+              console.log("Note Posted");
+            });
+        } else {
+          return null;
+        }
+      })
+      .filter((promise) => {
+        return promise !== null;
+      });
+
+    Promise.all(promises).then((result) => {
+      this.props.closeModal();
     });
   }
 
@@ -87,19 +108,32 @@ class ReviewClassModal extends React.Component {
         }}
         contentLabel="Example Modal"
       >
-        <div className="w-100">
-          {this.state.data.map((doc) => {
-            return this.getStudentLine(doc);
-          })}
-          <button
-            type="button"
-            className="btn btn-primary btn-lg"
-            onClick={() => {
-              this.submitNotes();
-            }}
-          >
-            Submit
-          </button>
+        <div className="container-fluid">
+          <div className="row">
+            <div className="col-10 rightRuleColumn">
+              {this.state.data.map((doc) => {
+                return this.getStudentLine(doc);
+              })}
+            </div>
+            <div className="col-2">
+              <button
+                type="button"
+                className="btn btn-primary btn-lg w-100"
+                onClick={() => {
+                  this.submitNotes();
+                }}
+              >
+                {this.state.loading ? (
+                  <span
+                    class="spinner-border spinner-border-sm mr-2"
+                    role="status"
+                    aria-hidden="true"
+                  ></span>
+                ) : null}
+                Submit
+              </button>
+            </div>
+          </div>
         </div>
       </Modal>
     );
