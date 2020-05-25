@@ -15,6 +15,7 @@
     "react": "^16.13.1",
     "react-charts": "^2.0.0-beta.6",
     "react-cookies": "^0.1.1",
+    "react-datasheet": "^1.4.4",
     "react-dom": "^16.13.1",
     "react-markdown": "^4.3.1",
     "react-modal": "^3.11.2",

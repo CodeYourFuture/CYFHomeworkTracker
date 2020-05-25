@@ -1,7 +1,6 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
 import Modal from "react-modal";
-import ModuleConfig from "../config/ModuleConfig";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
@@ -82,7 +81,7 @@ class LeaveNoteModal extends React.Component {
                 >
                   {this.state.loading ? (
                     <span
-                      class="spinner-border spinner-border-sm mr-1"
+                      class="spinner-border spinner-border-sm mr-2"
                       role="status"
                       aria-hidden="true"
                     ></span>

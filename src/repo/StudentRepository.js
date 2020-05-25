@@ -72,7 +72,7 @@ class StudentRepository {
       .getAllStudents()
       .get()
       .then((querySnapshot) => {
-        let attendancePromises = querySnapshot.docs
+        let homeworkPromises = querySnapshot.docs
           .map((doc) => {
             if (school.students.includes(doc.data().githubName)) {
               return doc.ref.collection("homework").get();
@@ -84,7 +84,7 @@ class StudentRepository {
             return doc !== null;
           });
 
-        return Promise.all(attendancePromises);
+        return Promise.all(homeworkPromises);
       })
       .then((results) => {
         let allHomework = [];

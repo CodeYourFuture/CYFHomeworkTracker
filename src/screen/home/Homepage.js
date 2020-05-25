@@ -14,6 +14,9 @@ import {
   Bar,
   ResponsiveContainer,
 } from "recharts";
+import ReactDataSheet from "react-datasheet";
+import HomeworkConfig from "../../config/HomeworkConfig";
+import "react-datasheet/lib/react-datasheet.css";
 
 class Homepage extends React.Component {
   constructor(props) {
@@ -23,6 +26,7 @@ class Homepage extends React.Component {
       averageHomeworkScore: 0,
       averageAttendance: 0,
       averageLate: 0,
+      homeworkGrid: [],
     };
 
     this.githubRepo = this.props.githubRepo;
@@ -58,7 +62,8 @@ class Homepage extends React.Component {
   componentDidUpdate(prevProps, prevState, snapshot) {
     if (prevState.school !== this.state.school) {
       this.getAttendanceForStudents();
-      this.getAverageHomeworkScore();
+      this.getHomework();
+      this.setDataForTable();
     }
   }
 
@@ -78,20 +83,81 @@ class Homepage extends React.Component {
     });
   }
 
-  getAverageHomeworkScore() {
+  getHomework() {
     if (this.state.school !== undefined) {
       this.studentRepo
         .getAllHomework(this.state.school)
         .then((allHomeworks) => {
-          let total = allHomeworks.reduce((acc, homework) => {
-            return (acc += homework.result);
-          }, 0);
-
-          let average = total / allHomeworks.length;
-
-          this.setState({ averageHomeworkScore: average });
+          this.calculateAverage(allHomeworks);
         });
     }
+  }
+
+  setDataForTable() {
+    let header = [{ value: "Student Name" }].concat(
+      HomeworkConfig.map((week) => {
+        return { value: week };
+      })
+    );
+    let grid = [header];
+
+    this.state.school.students.forEach((student, index) => {
+      console.log(student);
+      this.studentRepo
+        .getHomeworkForStudentByName(student)
+        .then((homeworks) => {
+          let line = [
+            { value: student },
+            { value: 0 },
+            { value: 0 },
+            { value: 0 },
+            { value: 0 },
+            { value: 0 },
+            { value: 0 },
+            { value: 0 },
+            { value: 0 },
+            { value: 0 },
+            { value: 0 },
+            { value: 0 },
+            { value: 0 },
+            { value: 0 },
+            { value: 0 },
+            { value: 0 },
+            { value: 0 },
+            { value: 0 },
+            { value: 0 },
+            { value: 0 },
+          ];
+
+          if (homeworks === undefined) {
+            return;
+          }
+
+          homeworks.forEach((homework) => {
+            let position =
+              HomeworkConfig.findIndex((week) => {
+                return week === homework.week;
+              }) + 1;
+
+            console.log(position);
+            line[position] = { value: homework.result };
+          });
+
+          grid[index + 1] = line;
+        });
+    });
+
+    this.setState({ homeworkGrid: grid });
+  }
+
+  calculateAverage(allHomeworks) {
+    let total = allHomeworks.reduce((acc, homework) => {
+      return (acc += homework.result);
+    }, 0);
+
+    let average = total / allHomeworks.length;
+
+    this.setState({ averageHomeworkScore: average });
   }
 
   getAttendanceForStudents() {
@@ -154,6 +220,22 @@ class Homepage extends React.Component {
     return (
       <div class="spinner-border spinner-border-sm" role="status">
         <span class="sr-only">Loading...</span>
+      </div>
+    );
+  }
+
+  getHomeworkComponent() {
+    return (
+      <div className="container mt-4">
+        <div className="card border-0 shadow">
+          <div className="card-body p-4 overflow-table">
+            <h2 className="font-weight-light">Homework</h2>
+            <ReactDataSheet
+              data={this.state.homeworkGrid}
+              valueRenderer={(cell) => cell.value}
+            />
+          </div>
+        </div>
       </div>
     );
   }
@@ -257,6 +339,7 @@ class Homepage extends React.Component {
                     </div>
                   </div>
                 </div>
+                {this.getHomeworkComponent()}
               </div>
             )}
           </div>

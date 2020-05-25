@@ -50,6 +50,10 @@ body {
   width: 100%;
 }
 
+.overflow-table {
+  overflow: auto;
+}
+
 .buttonLikeLink {
   background: none !important;
   border: none;
