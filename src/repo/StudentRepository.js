@@ -99,6 +99,36 @@ class StudentRepository {
       });
   }
 
+  postAttendanceForWeek(githubName, note, attended, week) {
+    return this.getStudentDetailsByName(githubName)
+      .then((snapshot) => {
+        if (attended === "No") {
+          let noteFull = `This student's did not attend class on <b>${week}</b>.`;
+
+          if (note !== undefined && note.length !== 0) {
+            noteFull =
+              noteFull +
+              `<br/><br/>The reviewer said<br /><div class="code">${note}</div>`;
+          }
+
+          snapshot.ref
+            .collection("notes")
+            .doc()
+            .set({ created: Date.now(), note: noteFull });
+        }
+      })
+      .then(() => {
+        return this.getStudentDetailsByName(githubName).then((snapshot) => {
+          snapshot.ref.collection("attendence").doc(week).set({
+            created: Date.now(),
+            note: note,
+            week: week,
+            result: attended,
+          });
+        });
+      });
+  }
+
   getAttendanceByWeek(school) {
     return this.firebase
       .getStudentsInSchool(school.name)

@@ -7,6 +7,8 @@ import StudentModal from "../../components/StudentModal";
 import LeaveNoteModal from "../../components/LeaveNoteModal";
 import ReviewClassModal from "../../components/ReviewClassModal";
 import Sidebar from "../../components/Sidebar";
+import SetAttendanceModal from "../../components/SetAttendanceModal";
+import AttendanceModal from "../../components/AttendanceModal";
 
 class StudentPage extends React.Component {
   constructor(props) {
@@ -18,6 +20,8 @@ class StudentPage extends React.Component {
       studentModal: { show: false, student: {} },
       reviewClassModal: { show: false },
       leaveNoteModal: { show: false },
+      updateAttendanceModal: { show: false },
+      attendanceModal: { show: false },
       isMentor: true,
     };
 
@@ -101,9 +105,26 @@ class StudentPage extends React.Component {
     });
   }
 
+  showAttendanceModal() {
+    this.setState({
+      attendanceModal: {
+        show: true,
+      },
+    });
+  }
+
   showLeaveNoteModal(login) {
     this.setState({
       leaveNoteModal: {
+        show: true,
+        studentName: login,
+      },
+    });
+  }
+
+  showUpdateAttendanceModal(login) {
+    this.setState({
+      updateAttendanceModal: {
         show: true,
         studentName: login,
       },
@@ -146,6 +167,9 @@ class StudentPage extends React.Component {
                   showModal={this.state.studentModal.show}
                   pullRequestData={this.state.data}
                   studentRepo={this.studentRepo}
+                  onUpdateAttendanceClicked={(studentName) => {
+                    this.showUpdateAttendanceModal(studentName);
+                  }}
                   onLeaveNoteClicked={(studentName) => {
                     this.showLeaveNoteModal(studentName);
                   }}
@@ -154,6 +178,18 @@ class StudentPage extends React.Component {
                       studentModal: {
                         show: false,
                         student: {},
+                      },
+                    });
+                  }}
+                />
+                <SetAttendanceModal
+                  studentName={this.state.updateAttendanceModal.studentName}
+                  showModal={this.state.updateAttendanceModal.show}
+                  studentRepo={this.studentRepo}
+                  closeModal={() => {
+                    this.setState({
+                      updateAttendanceModal: {
+                        show: false,
                       },
                     });
                   }}
@@ -184,6 +220,18 @@ class StudentPage extends React.Component {
                         });
                       }}
                     />
+                    <AttendanceModal
+                      school={this.state.school}
+                      showModal={this.state.attendanceModal.show}
+                      studentRepo={this.studentRepo}
+                      closeModal={() => {
+                        this.setState({
+                          attendanceModal: {
+                            show: false,
+                          },
+                        });
+                      }}
+                    />
                     <div className="container">
                       <div className="card border-0 shadow my-4">
                         <div className="card-body p-4">
@@ -207,6 +255,16 @@ class StudentPage extends React.Component {
                             }}
                           >
                             Report on Whole Class
+                          </button>
+
+                          <button
+                            type="button"
+                            className="btn btn-primary btn-lg ml-2"
+                            onClick={() => {
+                              this.showAttendanceModal();
+                            }}
+                          >
+                            Report Attendance
                           </button>
                         </div>
                       </div>

@@ -138,6 +138,20 @@ class StudentModal extends React.Component {
     );
   }
 
+  getUpdateAttendanceButton() {
+    return (
+      <div
+        className="btn btn-primary m-1 w-100"
+        rel="noopener noreferrer"
+        onClick={() => {
+          this.props.onUpdateAttendanceClicked(this.props.student.login);
+        }}
+      >
+        Update Attendance
+      </div>
+    );
+  }
+
   getStudentColumn(school) {
     return (
       <div>
@@ -172,6 +186,7 @@ class StudentModal extends React.Component {
         {this.state.averageHomeworkScore}
         <hr />
         {this.getLeaveNoteButton()}
+        {this.getUpdateAttendanceButton()}
       </div>
     );
   }

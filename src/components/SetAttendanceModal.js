@@ -5,7 +5,7 @@ import ModuleConfig from "../config/ModuleConfig";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
-class GiveGradeModal extends React.Component {
+class SetAttendanceModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -28,11 +28,6 @@ class GiveGradeModal extends React.Component {
     }
   }
 
-  handleChange(event) {
-    let grade = parseFloat(event.target.value);
-    this.setState({ grade: grade });
-  }
-
   handleNoteChange(content) {
     this.setState({ noteValue: content });
   }
@@ -41,15 +36,85 @@ class GiveGradeModal extends React.Component {
     this.setState({ loading: true });
 
     this.props.studentRepo
-      .postStudentHomework(
+      .postAttendanceForWeek(
         this.props.studentName,
         this.state.noteValue,
-        this.state.grade,
+        this.state.attended,
         this.state.week
       )
       .then(() => {
         this.props.closeModal();
       });
+  }
+
+  getWeekDropdown() {
+    return (
+      <div class="dropdown" id="week">
+        <button
+          class="btn btn-secondary dropdown-toggle"
+          type="button"
+          id="dropdownMenuButton"
+          data-toggle="dropdown"
+          aria-haspopup="true"
+          aria-expanded="false"
+        >
+          {this.state.week === undefined ? "Select Week" : this.state.week}
+        </button>
+        <div
+          class="dropdown-menu scrollable-menu"
+          aria-labelledby="dropdownMenuButton"
+        >
+          {ModuleConfig.map((week) => {
+            return (
+              <div
+                class="dropdown-item"
+                onClick={() => {
+                  this.setState({ week: week });
+                }}
+              >
+                {week}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
+
+  getAttendanceDropdown() {
+    return (
+      <div class="dropdown" id="attended">
+        <button
+          class="btn btn-secondary dropdown-toggle"
+          type="button"
+          id="dropdownMenuButton"
+          data-toggle="dropdown"
+          aria-haspopup="true"
+          aria-expanded="false"
+        >
+          {this.state.attended === undefined
+            ? "Select Attendance"
+            : this.state.attended}
+        </button>
+        <div
+          class="dropdown-menu scrollable-menu"
+          aria-labelledby="dropdownMenuButton"
+        >
+          {["Yes", "Late", "No"].map((attended) => {
+            return (
+              <div
+                class="dropdown-item"
+                onClick={() => {
+                  this.setState({ attended: attended });
+                }}
+              >
+                {attended}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
   }
 
   render() {
@@ -77,51 +142,13 @@ class GiveGradeModal extends React.Component {
           <div className="container">
             <div className="card-body p-3">
               <form>
-                <h1 className="font-weight-light">Give Grade</h1>
+                <h1 className="font-weight-light">Update Attendance</h1>
                 <h2 className="font-weight-light">{this.props.studentName}</h2>
                 <hr />
                 <label for="week">Week</label>
-                <div class="dropdown" id="week">
-                  <button
-                    class="btn btn-secondary dropdown-toggle"
-                    type="button"
-                    id="dropdownMenuButton"
-                    data-toggle="dropdown"
-                    aria-haspopup="true"
-                    aria-expanded="false"
-                  >
-                    {this.state.week === undefined
-                      ? "Select Week"
-                      : this.state.week}
-                  </button>
-                  <div
-                    class="dropdown-menu scrollable-menu"
-                    aria-labelledby="dropdownMenuButton"
-                  >
-                    {ModuleConfig.map((week) => {
-                      return (
-                        <div
-                          class="dropdown-item"
-                          onClick={() => {
-                            this.setState({ week: week });
-                          }}
-                        >
-                          {week}
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-                <label for="grade">Grade</label>
-                <input
-                  id="grade"
-                  class="form-control"
-                  type="number"
-                  value={this.state.grade}
-                  onChange={(event) => {
-                    this.handleChange(event);
-                  }}
-                />
+                {this.getWeekDropdown()}
+                <label for="grade">Attended?</label>
+                {this.getAttendanceDropdown()}
                 <label for="notes">Notes</label>
                 <ReactQuill
                   className="w-100"
@@ -149,7 +176,7 @@ class GiveGradeModal extends React.Component {
                       aria-hidden="true"
                     ></span>
                   ) : null}
-                  Submit Grade
+                  Submit Attendance
                 </div>
               </form>
             </div>
@@ -160,4 +187,4 @@ class GiveGradeModal extends React.Component {
   }
 }
 
-export default withRouter(GiveGradeModal);
+export default withRouter(SetAttendanceModal);
