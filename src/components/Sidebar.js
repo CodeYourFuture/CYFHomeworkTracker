@@ -24,6 +24,12 @@ class Sidebar extends React.Component {
     this.props.history.push(process.env.PUBLIC_URL + "/schools/" + location);
   }
 
+  gotToActivity(location = this.props.currentCity) {
+    this.props.history.push(
+      process.env.PUBLIC_URL + "/schools/" + location + "/activity"
+    );
+  }
+
   getCurrentPage() {
     let location = this.props.location;
     let page = location.pathname.split("/");
@@ -71,6 +77,20 @@ class Sidebar extends React.Component {
                 <i className="fa fa-user-graduate ml-2"></i>
               </button>
             </div>
+            {this.props.currentCity === "London" ? (
+              <div>
+                <button
+                  type="button"
+                  className="btn btn-primary btn-lg w-100 mt-2"
+                  onClick={() => {
+                    this.gotToActivity();
+                  }}
+                >
+                  Activity
+                  <i className="fa fa-chart-line ml-2"></i>
+                </button>
+              </div>
+            ) : null}
             <hr />
             <div className="btn-group w-100">
               <button

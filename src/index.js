@@ -11,6 +11,7 @@ import StudentRepository from "./repo/StudentRepository";
 import HomeworkPage from "./screen/homework/HomeworkPage";
 import StudentsPage from "./screen/students/StudentsPage";
 import Homepage from "./screen/home/Homepage";
+import ActivityPage from "././screen/activity/ActivityPage";
 
 let firebase = new Firebase();
 let studentRepo = new StudentRepository(firebase);
@@ -63,6 +64,17 @@ const routing = (
         path={process.env.PUBLIC_URL + "/schools/:city/students"}
         component={() => (
           <StudentsPage
+            githubRepo={githubRepo}
+            authRepo={authRepo}
+            studentRepo={studentRepo}
+          />
+        )}
+      />
+      <Route
+        exact
+        path={process.env.PUBLIC_URL + "/schools/:city/activity"}
+        component={() => (
+          <ActivityPage
             githubRepo={githubRepo}
             authRepo={authRepo}
             studentRepo={studentRepo}
