@@ -40,7 +40,7 @@ class Sidebar extends React.Component {
     return (
       <div className="card sidebar">
         {this.props.school !== undefined ? (
-          <div className="card-body p-3">
+          <div className="card-body">
             <div>
               <button
                 type="button"

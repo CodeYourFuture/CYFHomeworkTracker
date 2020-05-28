@@ -60,8 +60,8 @@ class ActivityPage extends React.Component {
             />
           </div>
           <div className="background-body col-10">
-            <div className="container-fluid">
-              <div className="card border-0 shadow my-5">
+            <div className="container">
+              <div className="card border-0 shadow my-4">
                 <div className="card-body p-1">
                   <iframe
                     title="activity"
