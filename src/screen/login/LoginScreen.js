@@ -6,7 +6,7 @@ class LoginScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      loading: false,
+      loading: false
     };
 
     let { history } = this.props;
@@ -15,14 +15,14 @@ class LoginScreen extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.authRepo = this.props.authRepo;
     this.authRepo.registerOnAuthListener(
-      (user) => {
+      user => {
         if (user) {
           history.push(process.env.PUBLIC_URL + "/");
           console.log("hello");
         }
       },
       () => {},
-      (error) => {
+      error => {
         console.log(error);
       }
     );
@@ -33,14 +33,14 @@ class LoginScreen extends React.Component {
     const name = target.name;
 
     this.setState({
-      [name]: target.value,
+      [name]: target.value
     });
   }
 
   handleSubmit(event) {
     this.setState({ loading: true });
     event.preventDefault();
-    this.authRepo.doSignInWithGithub((error) => {
+    this.authRepo.doSignInWithGithub(error => {
       this.showToast("Something went wrong. Call Chris.");
       this.setState({ loading: false });
     });
@@ -48,7 +48,7 @@ class LoginScreen extends React.Component {
 
   showToast(message) {
     toast(message, {
-      autoClose: 2000,
+      autoClose: 2000
     });
   }
 
@@ -62,16 +62,24 @@ class LoginScreen extends React.Component {
               <div class="container">
                 <div class="row">
                   <div class="col-md-9 col-lg-8 mx-auto">
-                    <h3 class="login-heading mb-4">
-                      Welcome to the CodeYourFuture Homework Tracker
+                    <h3 class="login-heading mb-4 text-center">
+                      Welcome to the <br />
+                      <img
+                        src="https://codeyourfuture.io/wp-content/uploads/2019/03/cyf_brand.png"
+                        alt="CYF logo"
+                        width="150"
+                      />
+                      <br />
+                      Homework Tracker
                     </h3>
                     <form>
                       <button
-                        class="btn btn-lg btn-primary btn-block btn-login text-uppercase font-weight-bold mb-2"
+                        class="btn btn-lg btn-dark btn-block btn-login text-uppercase font-weight-bold mb-2"
                         type="submit"
                         onClick={this.handleSubmit}
                       >
-                        Sign in with Github
+                        <i className="fa fa-github ml-2"></i> Sign in with
+                        Github
                       </button>
                     </form>
                   </div>

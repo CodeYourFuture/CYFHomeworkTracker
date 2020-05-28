@@ -12,7 +12,7 @@ import {
   BarChart,
   Legend,
   Bar,
-  ResponsiveContainer,
+  ResponsiveContainer
 } from "recharts";
 
 class Homepage extends React.Component {
@@ -22,7 +22,7 @@ class Homepage extends React.Component {
       attendanceData: [],
       averageHomeworkScore: 0,
       averageAttendance: 0,
-      averageLate: 0,
+      averageLate: 0
     };
 
     this.githubRepo = this.props.githubRepo;
@@ -37,9 +37,9 @@ class Homepage extends React.Component {
     this.setSchoolFromDefault();
 
     this.authRepo.registerOnAuthListener(
-      (user) => {
+      user => {
         if (user) {
-          this.githubRepo.setToken().then((u) => {
+          this.githubRepo.setToken().then(u => {
             // Do work
           });
         } else {
@@ -49,7 +49,7 @@ class Homepage extends React.Component {
       () => {
         history.push(process.env.PUBLIC_URL + "/login");
       },
-      (error) => {
+      error => {
         console.log(error);
       }
     );
@@ -74,23 +74,21 @@ class Homepage extends React.Component {
     this.setState({
       averageHomeworkScore: 0,
       averageAttendance: 0,
-      averageLate: 0,
+      averageLate: 0
     });
   }
 
   getAverageHomeworkScore() {
     if (this.state.school !== undefined) {
-      this.studentRepo
-        .getAllHomework(this.state.school)
-        .then((allHomeworks) => {
-          let total = allHomeworks.reduce((acc, homework) => {
-            return (acc += homework.result);
-          }, 0);
+      this.studentRepo.getAllHomework(this.state.school).then(allHomeworks => {
+        let total = allHomeworks.reduce((acc, homework) => {
+          return (acc += homework.result);
+        }, 0);
 
-          let average = total / allHomeworks.length;
+        let average = total / allHomeworks.length;
 
-          this.setState({ averageHomeworkScore: average });
-        });
+        this.setState({ averageHomeworkScore: average });
+      });
     }
   }
 
@@ -98,11 +96,11 @@ class Homepage extends React.Component {
     if (this.state.school !== undefined) {
       this.studentRepo
         .getAttendanceByWeek(this.state.school)
-        .then((orderedData) => {
+        .then(orderedData => {
           this.setState({
             attendanceData: orderedData,
             averageAttendance: this.calculateAverageAttendance(orderedData),
-            averageLate: this.calculateAverageLate(orderedData),
+            averageLate: this.calculateAverageLate(orderedData)
           });
         });
     }
@@ -145,15 +143,15 @@ class Homepage extends React.Component {
   }
 
   getSchoolFromName(schoolName) {
-    return cityConfig.filter((city) => {
+    return cityConfig.filter(city => {
       return city.name.toLowerCase() === schoolName.toLowerCase();
     })[0];
   }
 
   getLoading() {
     return (
-      <div class="spinner-border spinner-border-sm" role="status">
-        <span class="sr-only">Loading...</span>
+      <div className="spinner-border spinner-border-sm" role="status">
+        <span className="sr-only">Loading...</span>
       </div>
     );
   }
@@ -173,7 +171,7 @@ class Homepage extends React.Component {
             {this.state.school === undefined ? null : (
               <div>
                 <div className="container">
-                  <div className="card border-0 shadow my-4">
+                  <div className="card border-0 shadow my-4 text-center">
                     <div className="card-body p-4">
                       <h1 className="font-weight-light">
                         Welcome to <b>{this.state.school.name}</b>
@@ -184,7 +182,7 @@ class Homepage extends React.Component {
                 <div className="container">
                   <div className="row">
                     <div className="col-4">
-                      <div className="card border-0 shadow">
+                      <div className="card border-0 shadow text-center">
                         <div className="card-body p-4">
                           <h3 className="font-weight-light">
                             Average Homework
@@ -199,7 +197,7 @@ class Homepage extends React.Component {
                       </div>
                     </div>
                     <div className="col-4">
-                      <div className="card border-0 shadow">
+                      <div className="card border-0 shadow text-center">
                         <div className="card-body p-4">
                           <h3 className="font-weight-light">
                             Average Attendance
@@ -213,7 +211,7 @@ class Homepage extends React.Component {
                       </div>
                     </div>
                     <div className="col-4">
-                      <div className="card border-0 shadow">
+                      <div className="card border-0 shadow text-center">
                         <div className="card-body p-4">
                           <h3 className="font-weight-light">Average Late</h3>
                           <h2>

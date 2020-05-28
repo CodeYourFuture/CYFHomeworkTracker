@@ -17,7 +17,7 @@ class HomeworkPage extends React.Component {
       data: [],
       showOnboarding: false,
       studentModal: { show: false, student: {} },
-      reviewModal: { show: false, pullRequest: {} },
+      reviewModal: { show: false, pullRequest: {} }
     };
 
     this.githubRepo = this.props.githubRepo;
@@ -31,20 +31,20 @@ class HomeworkPage extends React.Component {
     this.history = history;
 
     this.setState({
-      isLoading: true,
+      isLoading: true
     });
 
     let defaultSchool = this.city;
     if (defaultSchool != null) {
       this.setState({
-        school: this.getSchoolFromName(defaultSchool),
+        school: this.getSchoolFromName(defaultSchool)
       });
     }
 
     this.authRepo.registerOnAuthListener(
-      (user) => {
+      user => {
         if (user) {
-          this.githubRepo.setToken().then((u) => {
+          this.githubRepo.setToken().then(u => {
             this.loadHomeworkRepos();
             this.setStudentFromParams();
           });
@@ -55,7 +55,7 @@ class HomeworkPage extends React.Component {
       () => {
         history.replace(process.env.PUBLIC_URL + "/login");
       },
-      (error) => {
+      error => {
         console.log(error);
       }
     );
@@ -70,10 +70,10 @@ class HomeworkPage extends React.Component {
   }
 
   loadHomeworkRepos() {
-    this.githubRepo.getAllHomeworkToReview(homeworkRepos).then((pulls) => {
+    this.githubRepo.getAllHomeworkToReview(homeworkRepos).then(pulls => {
       this.setState({
         isLoading: false,
-        data: pulls,
+        data: pulls
       });
     });
   }
@@ -84,13 +84,13 @@ class HomeworkPage extends React.Component {
   }
 
   getSchoolFromName(schoolName) {
-    return cityConfig.filter((city) => {
+    return cityConfig.filter(city => {
       return city.name.toLowerCase() === schoolName.toLowerCase();
     })[0];
   }
 
   getDataForSchool(school) {
-    return this.state.data.filter((homework) => {
+    return this.state.data.filter(homework => {
       if (school.name === "All") {
         return true;
       } else {
@@ -110,10 +110,10 @@ class HomeworkPage extends React.Component {
   }
 
   onStudentClicked(studentName) {
-    this.githubRepo.getStudent(studentName).then((student) => {
+    this.githubRepo.getStudent(studentName).then(student => {
       console.log(student.data);
       this.setState({
-        studentModal: { show: true, student: student.data },
+        studentModal: { show: true, student: student.data }
       });
     });
   }
@@ -124,7 +124,7 @@ class HomeworkPage extends React.Component {
     }
 
     this.setState({
-      reviewModal: { show: true, pullRequest: pullRequest },
+      reviewModal: { show: true, pullRequest: pullRequest }
     });
   }
 
@@ -145,7 +145,7 @@ class HomeworkPage extends React.Component {
               pullRequest={this.state.reviewModal.pullRequest}
               token={this.githubRepo.getToken()}
               school={this.state.school}
-              onViewStudentClicked={(studentName) => {
+              onViewStudentClicked={studentName => {
                 console.log(studentName);
                 this.onStudentClicked(studentName);
               }}
@@ -153,8 +153,8 @@ class HomeworkPage extends React.Component {
                 this.setState({
                   reviewModal: {
                     show: false,
-                    pullRequest: this.state.reviewModal.pullRequest,
-                  },
+                    pullRequest: this.state.reviewModal.pullRequest
+                  }
                 });
               }}
             />
@@ -163,7 +163,7 @@ class HomeworkPage extends React.Component {
                 <div className="container">
                   <div className="card border-0 shadow my-4">
                     <div className="card-body p-4">
-                      <h1 className="font-weight-light">
+                      <h1 className="font-weight-light text-center">
                         Welcome to the <b>{this.state.school.name}</b> Homework
                         Tracker
                       </h1>
@@ -182,7 +182,7 @@ class HomeworkPage extends React.Component {
                 <div className="container">
                   <div className="card border-0 shadow my-4">
                     <div className="card-body p-4">
-                      <h1 className="font-weight-light">
+                      <h1 className="font-weight-light text-center">
                         Remember to give a grade
                       </h1>
                       <p>
@@ -222,10 +222,10 @@ class HomeworkPage extends React.Component {
                     isLoading={this.state.isLoading}
                     data={this.getDataForSchool(this.state.school)}
                     token={this.githubRepo.getToken()}
-                    onReviewClicked={(pullRequest) => {
+                    onReviewClicked={pullRequest => {
                       this.onReviewClicked(pullRequest);
                     }}
-                    onStudentClicked={(githubLogin) => {
+                    onStudentClicked={githubLogin => {
                       this.onStudentClicked(githubLogin);
                     }}
                   />
@@ -238,7 +238,7 @@ class HomeworkPage extends React.Component {
                   school={this.state.school}
                   closeModal={() => {
                     this.setState({
-                      showOnboarding: false,
+                      showOnboarding: false
                     });
                   }}
                 />

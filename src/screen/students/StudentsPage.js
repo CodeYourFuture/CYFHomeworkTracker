@@ -15,8 +15,9 @@ class StudentPage extends React.Component {
       data: [],
       showOnboarding: false,
       studentModal: { show: false, student: {} },
-      reviewClassModal: { show: false },
-      isMentor: true,
+
+      reviewModal: { show: false, pullRequest: {} }
+
     };
 
     this.githubRepo = this.props.githubRepo;
@@ -29,7 +30,7 @@ class StudentPage extends React.Component {
     let { history } = this.props;
 
     this.setState({
-      isLoading: true,
+      isLoading: true
     });
 
     let defaultSchool = this.city;
@@ -38,9 +39,9 @@ class StudentPage extends React.Component {
     }
 
     this.authRepo.registerOnAuthListener(
-      (user) => {
+      user => {
         if (user) {
-          this.githubRepo.setToken().then((u) => {
+          this.githubRepo.setToken().then(u => {
             this.setStudentFromParams();
             this.checkVisibility();
           });
@@ -51,7 +52,7 @@ class StudentPage extends React.Component {
       () => {
         history.replace(process.env.PUBLIC_URL + "/login");
       },
-      (error) => {
+      error => {
         console.log(error);
       }
     );
@@ -77,16 +78,16 @@ class StudentPage extends React.Component {
   }
 
   getSchoolFromName(schoolName) {
-    return cityConfig.filter((city) => {
+    return cityConfig.filter(city => {
       return city.name.toLowerCase() === schoolName.toLowerCase();
     })[0];
   }
 
   onStudentClicked(studentName) {
-    this.githubRepo.getStudent(studentName).then((student) => {
+    this.githubRepo.getStudent(studentName).then(student => {
       console.log(student.data);
       this.setState({
-        studentModal: { show: true, student: student.data },
+        studentModal: { show: true, student: student.data }
       });
     });
   }
@@ -126,52 +127,43 @@ class StudentPage extends React.Component {
             />
           </div>
           <div className="background-body col-10">
-            {this.state.isMentor === true ? (
+
+            <StudentModal
+              student={this.state.studentModal.student}
+              githubRepo={this.githubRepo}
+              school={this.state.school}
+              showModal={this.state.studentModal.show}
+              pullRequestData={this.state.data}
+              studentRepo={this.studentRepo}
+              closeModal={() => {
+                this.setState({
+                  studentModal: {
+                    show: false,
+                    student: this.state.studentModal.student
+                  }
+                });
+              }}
+            />
+            <div className="container">
+              <div className="card border-0 shadow my-4">
+                <div className="card-body p-4">
+                  <h1 className="font-weight-light text-center">
+                    Welcome to the <b>{this.state.school.name}</b> Student
+                    Tracker
+                  </h1>
+                </div>
+              </div>
+            </div>
+            {this.state.school === "None" ? null : (
               <div>
-                <StudentModal
-                  student={this.state.studentModal.student}
-                  githubRepo={this.githubRepo}
-                  school={this.state.school}
-                  showModal={this.state.studentModal.show}
-                  pullRequestData={this.state.data}
-                  studentRepo={this.studentRepo}
-                  closeModal={() => {
-                    this.setState({
-                      studentModal: {
-                        show: false,
-                        student: this.state.studentModal.student,
-                      },
-                    });
-                  }}
-                />
-                {this.state.school === undefined ? null : (
-                  <div>
-                    <ReviewClassModal
-                      school={this.state.school}
-                      showModal={this.state.reviewClassModal.show}
-                      studentRepo={this.studentRepo}
-                      closeModal={() => {
-                        this.setState({
-                          reviewClassModal: {
-                            show: false,
-                          },
-                        });
-                      }}
-                    />
-                    <div className="container">
-                      <div className="card border-0 shadow my-4">
-                        <div className="card-body p-4">
-                          <h1 className="font-weight-light">
-                            Welcome to the <b>{this.state.school.name}</b>{" "}
-                            Student Tracker
-                          </h1>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="container">
-                      <div className="card border-0 shadow my-4">
-                        <div className="card-body p-4">
-                          <h1 className="font-weight-light">Class Actions</h1>
+                <div className="container">
+                  <div className="card border-0 shadow my-4">
+                    <div className="card-body p-4">
+                      <h1 className="font-weight-light text-center">
+                        Students
+                      </h1>
+                      {this.state.school.students.map(studentName => {
+                        return (
 
                           <button
                             type="button"

@@ -1,5 +1,5 @@
 import React from "react";
-import { withRouter } from "react-router-dom";
+import { withRouter, Link } from "react-router-dom";
 import cityConfig from "../config/CityConfig.js";
 
 class Sidebar extends React.Component {
@@ -36,6 +36,14 @@ class Sidebar extends React.Component {
         {this.props.school !== undefined ? (
           <div className="card-body p-3">
             <div>
+              <Link to="/">
+                <button className="btn btn-info btn-lg w-100 mt-2">
+                  <i className="fa fa-home ml-2"></i> Home
+                </button>
+              </Link>
+            </div>
+            <hr />
+            <div>
               <button
                 type="button"
                 className="btn btn-primary btn-lg w-100 mt-5"
@@ -43,8 +51,7 @@ class Sidebar extends React.Component {
                   this.goToHome();
                 }}
               >
-                Home
-                <i className="fa fa-home ml-2"></i>
+                <i class="fas fa-tachometer-alt"></i> Dashboard
               </button>
             </div>
             <div>
@@ -55,8 +62,7 @@ class Sidebar extends React.Component {
                   this.goToHomework();
                 }}
               >
-                Homework
-                <i className="fa fa-book ml-2"></i>
+                <i className="fa fa-book ml-2"></i> Homework
               </button>
             </div>
             <div>
@@ -67,8 +73,7 @@ class Sidebar extends React.Component {
                   this.goToStudents();
                 }}
               >
-                Students
-                <i className="fa fa-user-graduate ml-2"></i>
+                <i className="fa fa-user-graduate ml-2"></i> Students
               </button>
             </div>
             <hr />
@@ -83,7 +88,7 @@ class Sidebar extends React.Component {
                 {this.props.school.name}
               </button>
               <div className="dropdown-menu">
-                {cityConfig.map((city) => {
+                {cityConfig.map(city => {
                   return (
                     <div
                       className="dropdown-item"
@@ -99,6 +104,7 @@ class Sidebar extends React.Component {
                 })}
               </div>
             </div>
+            <hr />
           </div>
         ) : null}
       </div>

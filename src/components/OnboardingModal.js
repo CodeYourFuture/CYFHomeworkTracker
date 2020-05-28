@@ -11,8 +11,8 @@ class OnboardingModal extends React.Component {
         maxWidth: 1000,
         minHeight: 300,
         margin: "0 auto",
-        padding: 30,
-      },
+        padding: 30
+      }
     };
 
     return (
@@ -34,6 +34,7 @@ class OnboardingModal extends React.Component {
               confidence in our students.
             </p>
             <br />
+            <hr />
             <h3 className="font-weight-light">1. Read the guide</h3>
             <p>
               The guide gives high level information and what we're trying to
@@ -41,7 +42,7 @@ class OnboardingModal extends React.Component {
               fully mark the homework.
             </p>
             <p>
-              You can read the full guide{" "}
+              You can read the full guide
               <a
                 href="https://docs.codeyourfuture.io/volunteers/education/homework-feedback"
                 target="_blank"
@@ -51,6 +52,7 @@ class OnboardingModal extends React.Component {
               </a>
             </p>
             <br />
+            <hr />
             <h3 className="font-weight-light">2. Choose your city</h3>
             <p>
               In the previous screen you can select the school that you
@@ -59,6 +61,7 @@ class OnboardingModal extends React.Component {
               school to start off with.
             </p>
             <br />
+            <hr />
             <h3 className="font-weight-light">3. Give feedback</h3>
             <p>On each of row of the table below you can find</p>
             <ul>
@@ -73,7 +76,7 @@ class OnboardingModal extends React.Component {
               reviewed it.
             </p>
             <p>
-              See{" "}
+              See
               <a
                 href="https://docs.codeyourfuture.io/volunteers/education/homework-feedback#labelling-the-pull-request"
                 target="_blank"
@@ -84,6 +87,7 @@ class OnboardingModal extends React.Component {
               for more information.
             </p>
             <br />
+            <hr />
             <h3 className="font-weight-light">4. Give a grade</h3>
             <p>
               It is very important that when you finish giving feedback on a
@@ -91,8 +95,8 @@ class OnboardingModal extends React.Component {
               spreadsheet. These are city specific and you can find the link to
               your cities in the card below.
             </p>
-            <p>Record the grade here</p>
-            <div>
+            <p>Hit the button to record grade.</p>
+            <div className="text-center">
               <a
                 className="btn btn-primary"
                 href={this.props.school.tracker}
@@ -103,13 +107,15 @@ class OnboardingModal extends React.Component {
               </a>
             </div>
             <br />
-            <h3 className="font-weight-light">Questions</h3>
+            <hr />
+            <h3 className="font-weight-light">Questions?</h3>
             <p>Speak to your Class Coordinator or Chris Owen.</p>
+            <hr />
             <button
-              className="btn btn-danger"
+              className="btn btn-danger float-right"
               onClick={() => this.props.hideOnboarding()}
             >
-              Close
+              Close Modal
             </button>
           </div>
         </div>
