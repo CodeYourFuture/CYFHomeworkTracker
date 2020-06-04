@@ -117,6 +117,16 @@ class HomeworkPage extends React.Component {
     });
   }
 
+  onViewStudentClicked(studentName) {
+    this.props.history.push(
+      process.env.PUBLIC_URL +
+        "/schools/" +
+        this.city +
+        "/students?student=" +
+        studentName
+    );
+  }
+
   render() {
     return (
       <div>
@@ -134,8 +144,10 @@ class HomeworkPage extends React.Component {
               pullRequest={this.state.reviewModal.pullRequest}
               token={this.githubRepo.getToken()}
               school={this.state.school}
+              onViewStudentClicked={(studentName) => {
+                this.onViewStudentClicked(studentName);
+              }}
               onGiveGradeClicked={(studentName) => {
-                console.log(studentName);
                 this.onGiveGradeClicked(studentName);
               }}
               closeModal={() => {

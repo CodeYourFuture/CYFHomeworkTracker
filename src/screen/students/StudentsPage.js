@@ -70,11 +70,23 @@ class StudentPage extends React.Component {
   }
 
   setStudentFromParams() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const student = urlParams.get("student");
+    let student = this.parseQuery(this.props.location.search).student;
     if (student !== null) {
       this.onStudentClicked(student);
     }
+  }
+
+  parseQuery(queryString) {
+    var query = {};
+    var pairs = (queryString[0] === "?"
+      ? queryString.substr(1)
+      : queryString
+    ).split("&");
+    for (var i = 0; i < pairs.length; i++) {
+      var pair = pairs[i].split("=");
+      query[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1] || "");
+    }
+    return query;
   }
 
   setSchool(schoolName) {
