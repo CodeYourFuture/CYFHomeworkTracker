@@ -14,6 +14,24 @@ class StudentRepository {
     });
   }
 
+  addEducationBuddy(githubName, name, email) {
+    return this.getStudentDetailsByName(githubName).then((snapshot) => {
+      return snapshot.ref
+        .collection("education")
+        .doc()
+        .set({ created: Date.now(), name: name, email: email });
+    });
+  }
+
+  addPersonalDevelopmentBuddy(githubName, name, email) {
+    return this.getStudentDetailsByName(githubName).then((snapshot) => {
+      return snapshot.ref
+        .collection("pd")
+        .doc()
+        .set({ created: Date.now(), name: name, email: email });
+    });
+  }
+
   postStudentHomework(githubName, note, grade, week) {
     let noteFull = `This student's homework for <b>${week}</b> has been graded. They received a grade of <b>${grade}/10</b>.`;
 
@@ -64,6 +82,21 @@ class StudentRepository {
             studentNotes: data,
           });
         });
+    });
+  }
+
+  getEducationBuddiesForStudent(login, onNotesRetrieved) {
+    this.getStudentDetailsByName(login).then((student) => {
+      student.ref.collection("education").onSnapshot((query) => {
+        let data = query.docs.map((doc) => {
+          return doc.data();
+        });
+
+        onNotesRetrieved({
+          studentInfo: student.data(),
+          educationBuddies: data,
+        });
+      });
     });
   }
 

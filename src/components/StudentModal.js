@@ -4,13 +4,17 @@ import Modal from "react-modal";
 import ProjectSpecs from "../config/ProjectSpecs";
 import CityConfig from "../config/CityConfig";
 import HomeworkTable from "../components/HomeworkTable";
+import StudentMentorComponent from "./StudentMentorComponent";
 
 class StudentModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       school: {},
+      studentInfo: {},
       studentNotes: [],
+      educationBuddies: [],
+      pdBuddies: [],
     };
   }
 
@@ -33,6 +37,13 @@ class StudentModal extends React.Component {
     });
 
     this.props.studentRepo.getNotesForStudent(
+      this.props.student.login,
+      (data) => {
+        this.setState(data);
+      }
+    );
+
+    this.props.studentRepo.getEducationBuddiesForStudent(
       this.props.student.login,
       (data) => {
         this.setState(data);
@@ -202,8 +213,16 @@ class StudentModal extends React.Component {
   getDetailsColumn() {
     return (
       <div className="container-fluid">
+        <h1 className="font-weight-light">Student Buddies</h1>
+        <StudentMentorComponent
+          educationBuddies={this.state.educationBuddies}
+          pdBuddies={this.state.pdBuddies}
+          studentName={this.props.student.login}
+          studentRepo={this.props.studentRepo}
+        />
+        <hr />
         <h1 className="font-weight-light">Student Record</h1>
-        {this.state.studentNotes.length === 0
+        {this.state.studentInfo === undefined
           ? this.getLoading()
           : this.state.studentNotes.map((note) => {
               return (
