@@ -10,15 +10,15 @@ class StudentMentorComponent extends React.Component {
   getAddBuddy(type) {
     return (
       <div>
-        <div class="input-group mb-3">
-          <div class="input-group-prepend">
-            <span class="input-group-text" id="basic-addon1">
+        <div className="input-group mb-3">
+          <div className="input-group-prepend">
+            <span className="input-group-text" id="basic-addon1">
               Name
             </span>
           </div>
           <input
             type="text"
-            class="form-control"
+            className="form-control"
             aria-label="Name"
             aria-describedby="basic-addon1"
             onChange={(event) => {
@@ -26,15 +26,15 @@ class StudentMentorComponent extends React.Component {
             }}
           />
         </div>
-        <div class="input-group mb-3">
-          <div class="input-group-prepend">
-            <span class="input-group-text" id="basic-addon1">
+        <div className="input-group mb-3">
+          <div className="input-group-prepend">
+            <span className="input-group-text" id="basic-addon1">
               Email
             </span>
           </div>
           <input
             type="text"
-            class="form-control"
+            className="form-control"
             aria-label="Email"
             aria-describedby="basic-addon1"
             onChange={(event) => {
@@ -97,12 +97,12 @@ class StudentMentorComponent extends React.Component {
 
                   <button
                     type="button"
-                    class="btn btn-primary"
+                    className="btn btn-primary"
                     onClick={() => {
                       this.onAddBuddyClick("education");
                     }}
                   >
-                    Add Buddy <i class="fas fa-plus-square"></i>
+                    Add Buddy <i className="fas fa-plus-square"></i>
                   </button>
                 </li>
               </ul>
@@ -119,12 +119,12 @@ class StudentMentorComponent extends React.Component {
                   {this.state.pdAddShow ? this.getAddBuddy("pd") : null}
                   <button
                     type="button"
-                    class="btn btn-primary"
+                    className="btn btn-primary"
                     onClick={() => {
                       this.onAddBuddyClick("pd");
                     }}
                   >
-                    Add Buddy <i class="fas fa-plus-square"></i>
+                    Add Buddy <i className="fas fa-plus-square"></i>
                   </button>
                 </li>
               </ul>

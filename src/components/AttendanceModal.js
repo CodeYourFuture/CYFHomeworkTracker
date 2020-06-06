@@ -97,7 +97,7 @@ class AttendanceModal extends React.Component {
             : this.state.students[studentName]}
         </button>
         <div
-          class="dropdown-menu scrollable-menu"
+          className="dropdown-menu scrollable-menu"
           aria-labelledby="dropdownMenuButton"
         >
           {["Yes", "Late", "No"].map((attended) => {
@@ -165,7 +165,7 @@ class AttendanceModal extends React.Component {
       >
         {this.state.loading ? (
           <span
-            class="spinner-border spinner-border-sm mr-2"
+            className="spinner-border spinner-border-sm mr-2"
             role="status"
             aria-hidden="true"
           ></span>

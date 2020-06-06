@@ -81,9 +81,9 @@ class GiveGradeModal extends React.Component {
                 <h2 className="font-weight-light">{this.props.studentName}</h2>
                 <hr />
                 <label for="week">Week</label>
-                <div class="dropdown" id="week">
+                <div className="dropdown" id="week">
                   <button
-                    class="btn btn-secondary dropdown-toggle"
+                    className="btn btn-secondary dropdown-toggle"
                     type="button"
                     id="dropdownMenuButton"
                     data-toggle="dropdown"
@@ -95,13 +95,13 @@ class GiveGradeModal extends React.Component {
                       : this.state.week}
                   </button>
                   <div
-                    class="dropdown-menu scrollable-menu"
+                    className="dropdown-menu scrollable-menu"
                     aria-labelledby="dropdownMenuButton"
                   >
                     {ModuleConfig.map((week) => {
                       return (
                         <div
-                          class="dropdown-item"
+                          className="dropdown-item"
                           onClick={() => {
                             this.setState({ week: week });
                           }}
@@ -115,7 +115,7 @@ class GiveGradeModal extends React.Component {
                 <label for="grade">Grade</label>
                 <input
                   id="grade"
-                  class="form-control"
+                  className="form-control"
                   type="number"
                   value={this.state.grade}
                   onChange={(event) => {
@@ -144,7 +144,7 @@ class GiveGradeModal extends React.Component {
                 >
                   {this.state.loading ? (
                     <span
-                      class="spinner-border spinner-border-sm mr-2"
+                      className="spinner-border spinner-border-sm mr-2"
                       role="status"
                       aria-hidden="true"
                     ></span>
