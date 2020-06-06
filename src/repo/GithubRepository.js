@@ -30,12 +30,6 @@ class GithubRepository {
     return this.token;
   }
 
-  getStudent(studentName) {
-    return this.octokit.users.getByUsername({
-      username: studentName,
-    });
-  }
-
   getAllHomework(repoName, pageNo) {
     return this.octokit.pulls
       .list({

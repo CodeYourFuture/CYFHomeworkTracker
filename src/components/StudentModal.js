@@ -2,7 +2,7 @@ import React from "react";
 import { withRouter } from "react-router-dom";
 import Modal from "react-modal";
 import ProjectSpecs from "../config/ProjectSpecs";
-import CityConfig from "../config/CityConfig";
+import cityConfig from "../config/CityConfig";
 import HomeworkTable from "../components/HomeworkTable";
 import StudentMentorComponent from "./StudentMentorComponent";
 
@@ -27,34 +27,40 @@ class StudentModal extends React.Component {
       return;
     }
 
-    if (prevProps.student.login === this.props.student.login) {
+    if (prevProps.student.githubName === this.props.student.githubName) {
       return;
     }
 
     this.getAverageHomeworkScore();
     this.setState({
-      school: this.getSchoolFromUsername(this.props.student.login),
+      school: this.getSchoolFromName(this.props.student.school),
     });
 
     this.props.studentRepo.getNotesForStudent(
-      this.props.student.login,
+      this.props.student.githubName,
       (data) => {
         this.setState(data);
       }
     );
 
     this.props.studentRepo.getEducationBuddiesForStudent(
-      this.props.student.login,
+      this.props.student.githubName,
       (data) => {
         this.setState(data);
       }
     );
   }
 
+  getSchoolFromName(schoolName) {
+    return cityConfig.filter((city) => {
+      return city.name.toLowerCase() === schoolName.toLowerCase();
+    })[0];
+  }
+
   getProjectsOnline() {
     this.state.data.forEach((project, index) => {
       fetch(
-        `https://cyf-${this.props.student.login}-${project.shortName}.netlify.com`
+        `https://cyf-${this.props.student.githubName}-${project.shortName}.netlify.com`
       )
         .then((data) => {
           project.success = data.status === 200;
@@ -75,10 +81,7 @@ class StudentModal extends React.Component {
   }
 
   getStudentName() {
-    let name =
-      this.props.student.name === null
-        ? this.props.student.login
-        : this.props.student.name;
+    let name = this.props.student.name;
 
     if (name === undefined) {
       return "Loading...";
@@ -97,22 +100,6 @@ class StudentModal extends React.Component {
     this.props.closeModal();
   }
 
-  getSchoolFromUsername(username) {
-    if (username === undefined) {
-      return "Loading...";
-    }
-
-    let foundSchool;
-
-    CityConfig.forEach((school) => {
-      if (school.students.includes(username)) {
-        foundSchool = school;
-      }
-    });
-
-    return foundSchool;
-  }
-
   getPullRequestsForStudent(username) {
     return this.props.pullRequestData.filter((pull) => {
       return pull.user.login === username;
@@ -121,7 +108,7 @@ class StudentModal extends React.Component {
 
   getAverageHomeworkScore() {
     this.props.studentRepo
-      .getHomeworkForStudentByName(this.props.student.login)
+      .getHomeworkForStudentByName(this.props.student.githubName)
       .then((result) => {
         let total = 0;
 
@@ -141,7 +128,7 @@ class StudentModal extends React.Component {
         className="btn btn-primary m-1 w-100"
         rel="noopener noreferrer"
         onClick={() => {
-          this.props.onLeaveNoteClicked(this.props.student.login);
+          this.props.onLeaveNoteClicked(this.props.student.githubName);
         }}
       >
         Leave Note
@@ -155,7 +142,7 @@ class StudentModal extends React.Component {
         className="btn btn-primary m-1 w-100"
         rel="noopener noreferrer"
         onClick={() => {
-          this.props.onUpdateAttendanceClicked(this.props.student.login);
+          this.props.onUpdateAttendanceClicked(this.props.student.githubName);
         }}
       >
         Update Attendance
@@ -166,14 +153,7 @@ class StudentModal extends React.Component {
   getStudentColumn(school) {
     return (
       <div>
-        <img
-          className="align-self-start mr-3"
-          height="128"
-          width="128"
-          src={this.props.student.avatar_url}
-          alt={this.getStudentName() + "'s Avatar"}
-        />
-        <h3 className="mt-0">{this.getStudentName()}</h3>
+        <h1 className="font-weight-light">{this.getStudentName()}</h1>
         <p>
           School: {school.name}
           <br />
@@ -213,15 +193,15 @@ class StudentModal extends React.Component {
   getDetailsColumn() {
     return (
       <div className="container-fluid">
-        <h1 className="font-weight-light">Student Buddies</h1>
+        <h2 className="font-weight-light">Student Buddies</h2>
         <StudentMentorComponent
           educationBuddies={this.state.educationBuddies}
           pdBuddies={this.state.pdBuddies}
-          studentName={this.props.student.login}
+          studentGithubName={this.props.student.githubName}
           studentRepo={this.props.studentRepo}
         />
         <hr />
-        <h1 className="font-weight-light">Student Record</h1>
+        <h2 className="font-weight-light">Student Record</h2>
         {this.state.studentInfo === undefined
           ? this.getLoading()
           : this.state.studentNotes.map((note) => {

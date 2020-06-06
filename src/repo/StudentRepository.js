@@ -100,22 +100,12 @@ class StudentRepository {
     });
   }
 
-  getAllHomework(school) {
-    return this.firebase
-      .getAllStudents()
-      .get()
-      .then((querySnapshot) => {
-        let homeworkPromises = querySnapshot.docs
-          .map((doc) => {
-            if (school.students.includes(doc.data().githubName)) {
-              return doc.ref.collection("homework").get();
-            } else {
-              return null;
-            }
-          })
-          .filter((doc) => {
-            return doc !== null;
-          });
+  getAllHomework(schoolName) {
+    return this.getStudentRefsInSchool(schoolName)
+      .then((students) => {
+        let homeworkPromises = students.map((doc) => {
+          return doc.ref.collection("homework").get();
+        });
 
         return Promise.all(homeworkPromises);
       })
@@ -158,6 +148,28 @@ class StudentRepository {
             week: week,
             result: attended,
           });
+        });
+      });
+  }
+
+  getStudentsInSchool(schoolName) {
+    return this.firebase
+      .getStudentsInSchool(schoolName)
+      .get()
+      .then((querySnapshot) => {
+        return querySnapshot.docs.map((doc) => {
+          return doc.data();
+        });
+      });
+  }
+
+  getStudentRefsInSchool(schoolName) {
+    return this.firebase
+      .getStudentsInSchool(schoolName)
+      .get()
+      .then((querySnapshot) => {
+        return querySnapshot.docs.map((doc) => {
+          return doc;
         });
       });
   }
@@ -257,6 +269,15 @@ class StudentRepository {
       .get()
       .then(function (querySnapshot) {
         return querySnapshot.docs[0];
+      });
+  }
+
+  getStudentDataByName(githubName) {
+    return this.firebase
+      .getStudentByName(githubName)
+      .get()
+      .then(function (querySnapshot) {
+        return querySnapshot.docs[0].data();
       });
   }
 }

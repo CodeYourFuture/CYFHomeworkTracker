@@ -1,6 +1,5 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
-import cityConfig from "../config/CityConfig.js";
 
 class StudentMentorComponent extends React.Component {
   constructor(props) {
@@ -51,14 +50,13 @@ class StudentMentorComponent extends React.Component {
     let state = {};
     state[type + field] = content;
     this.setState(state);
-    console.log(this.state);
   }
 
   onAddBuddyClick(type) {
     if (type === "education") {
       if (this.state.educationAddShow) {
         this.props.studentRepo.addEducationBuddy(
-          this.props.studentName,
+          this.props.studentGithubName,
           this.state.educationName,
           this.state.educationEmail
         );
@@ -70,7 +68,7 @@ class StudentMentorComponent extends React.Component {
     } else {
       if (this.state.pdAddShow) {
         this.props.studentRepo.addPersonalDevelopmentBuddy(
-          this.props.studentName,
+          this.props.studentGithubName,
           this.state.pdName,
           this.state.pdEmail
         );

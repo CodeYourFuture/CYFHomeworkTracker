@@ -78,6 +78,7 @@ const routing = (
             githubRepo={githubRepo}
             authRepo={authRepo}
             studentRepo={studentRepo}
+            firebase={firebase}
           />
         )}
       />

@@ -36,8 +36,6 @@ class AttendanceModal extends React.Component {
   }
 
   handleChange(studentName, contents) {
-    console.log(contents);
-
     let state = { students: {} };
     state.students[studentName] = {};
     state.students[studentName].noteValue = contents;

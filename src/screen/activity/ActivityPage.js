@@ -12,6 +12,7 @@ class ActivityPage extends React.Component {
     this.githubRepo = this.props.githubRepo;
     this.authRepo = this.props.authRepo;
     this.studentRepo = this.props.studentRepo;
+    this.firebase = this.props.firebase;
 
     this.city = this.props.match.params.city;
   }

@@ -27,6 +27,7 @@ class Homepage extends React.Component {
       averageAttendance: 0,
       averageLate: 0,
       homeworkGrid: [],
+      students: [],
     };
 
     this.githubRepo = this.props.githubRepo;
@@ -44,7 +45,7 @@ class Homepage extends React.Component {
       (user) => {
         if (user) {
           this.githubRepo.setToken().then((u) => {
-            // Do work
+            // Do work that requires github
           });
         } else {
           history.push(process.env.PUBLIC_URL + "/login");
@@ -63,7 +64,10 @@ class Homepage extends React.Component {
     if (prevState.school !== this.state.school) {
       this.getAttendanceForStudents();
       this.getHomework();
-      this.setDataForTable();
+      this.studentRepo.getStudentsInSchool(this.city).then((students) => {
+        this.setState({ students: students });
+        this.setDataForTable();
+      });
     }
   }
 
@@ -85,11 +89,9 @@ class Homepage extends React.Component {
 
   getHomework() {
     if (this.state.school !== undefined) {
-      this.studentRepo
-        .getAllHomework(this.state.school)
-        .then((allHomeworks) => {
-          this.calculateAverage(allHomeworks);
-        });
+      this.studentRepo.getAllHomework(this.city).then((allHomeworks) => {
+        this.calculateAverage(allHomeworks);
+      });
     }
   }
 
@@ -101,13 +103,12 @@ class Homepage extends React.Component {
     );
     let grid = [header];
 
-    this.state.school.students.forEach((student, index) => {
-      console.log(student);
+    this.state.students.forEach((student, index) => {
       this.studentRepo
-        .getHomeworkForStudentByName(student)
+        .getHomeworkForStudentByName(student.githubName)
         .then((homeworks) => {
           let line = [
-            { value: student },
+            { value: student.name },
             { value: 0 },
             { value: 0 },
             { value: 0 },
@@ -139,7 +140,6 @@ class Homepage extends React.Component {
                 return week === homework.week;
               }) + 1;
 
-            console.log(position);
             line[position] = { value: homework.result };
           });
 

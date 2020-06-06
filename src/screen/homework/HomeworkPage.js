@@ -16,6 +16,7 @@ class HomeworkPage extends React.Component {
     this.state = {
       isLoading: false,
       data: [],
+      students: [],
       showOnboarding: false,
       gradeModal: { show: false },
       reviewModal: { show: false, pullRequest: {} },
@@ -59,6 +60,11 @@ class HomeworkPage extends React.Component {
         console.log(error);
       }
     );
+
+    this.studentRepo.getStudentsInSchool(this.city).then((students) => {
+      console.log(students);
+      this.setState({ students: students });
+    });
   }
 
   loadHomeworkRepos() {
@@ -83,11 +89,9 @@ class HomeworkPage extends React.Component {
 
   getDataForSchool(school) {
     return this.state.data.filter((homework) => {
-      if (school.name === "All") {
-        return true;
-      } else {
-        return school.students.includes(homework.user.login);
-      }
+      return this.state.students.some(
+        (student) => student.githubName === homework.user.login
+      );
     });
   }
 
@@ -234,6 +238,7 @@ class HomeworkPage extends React.Component {
                 </div>
                 <div className="container">
                   <HomeworkTable
+                    students={this.state.students}
                     isLoading={this.state.isLoading}
                     data={this.getDataForSchool(this.state.school)}
                     token={this.githubRepo.getToken()}

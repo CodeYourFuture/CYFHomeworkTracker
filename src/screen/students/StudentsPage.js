@@ -16,6 +16,7 @@ class StudentPage extends React.Component {
     this.state = {
       isLoading: false,
       data: [],
+      students: undefined,
       showOnboarding: false,
       studentModal: { show: false, student: {} },
       reviewClassModal: { show: false },
@@ -61,6 +62,18 @@ class StudentPage extends React.Component {
         console.log(error);
       }
     );
+
+    this.studentRepo.getStudentsInSchool(this.city).then((students) => {
+      this.setState({ students: students });
+    });
+  }
+
+  getLoading() {
+    return (
+      <div class="spinner-border" role="status">
+        <span class="sr-only">Loading...</span>
+      </div>
+    );
   }
 
   checkVisibility() {
@@ -71,7 +84,7 @@ class StudentPage extends React.Component {
 
   setStudentFromParams() {
     let student = this.parseQuery(this.props.location.search).student;
-    if (student !== null) {
+    if (student !== undefined) {
       this.onStudentClicked(student);
     }
   }
@@ -101,10 +114,9 @@ class StudentPage extends React.Component {
   }
 
   onStudentClicked(studentName) {
-    this.githubRepo.getStudent(studentName).then((student) => {
-      console.log(student.data);
+    this.studentRepo.getStudentDataByName(studentName).then((student) => {
       this.setState({
-        studentModal: { show: true, student: student.data },
+        studentModal: { show: true, student: student },
       });
     });
   }
@@ -285,19 +297,21 @@ class StudentPage extends React.Component {
                       <div className="card border-0 shadow my-4">
                         <div className="card-body p-4">
                           <h1 className="font-weight-light">Students</h1>
-                          {this.state.school.students.map((studentName) => {
-                            return (
-                              <button
-                                key={studentName}
-                                className="btn btn-outline-secondary btn-sm m-1"
-                                onClick={() => {
-                                  this.onStudentClicked(studentName);
-                                }}
-                              >
-                                {studentName}
-                              </button>
-                            );
-                          })}
+                          {this.state.students === undefined
+                            ? this.getLoading()
+                            : this.state.students.map((student) => {
+                                return (
+                                  <button
+                                    key={student.name}
+                                    className="btn btn-outline-secondary btn-sm m-1"
+                                    onClick={() => {
+                                      this.onStudentClicked(student.githubName);
+                                    }}
+                                  >
+                                    {student.name}
+                                  </button>
+                                );
+                              })}
                         </div>
                       </div>
                     </div>

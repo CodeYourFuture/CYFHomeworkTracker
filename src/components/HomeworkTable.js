@@ -16,7 +16,6 @@ import Remove from "@material-ui/icons/Remove";
 import SaveAlt from "@material-ui/icons/SaveAlt";
 import Search from "@material-ui/icons/Search";
 import ViewColumn from "@material-ui/icons/ViewColumn";
-import cityConfig from "../config/CityConfig.js";
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -84,7 +83,10 @@ class HomeworkTable extends React.Component {
       render: (rowData) => {
         return (
           <button className="buttonLikeLink" href="#">
-            {rowData.user.login}
+            {
+              this.getStudentFromName(rowData.user.login, this.props.students)
+                .name
+            }
           </button>
         );
       },
@@ -92,15 +94,8 @@ class HomeworkTable extends React.Component {
     {
       title: "School",
       render: (rowData) => {
-        let schoolName = "Unknown";
-
-        cityConfig.forEach((location) => {
-          if (location.students.includes(rowData.user.login)) {
-            schoolName = location.name;
-          }
-        });
-
-        return schoolName.toString();
+        return this.getStudentFromName(rowData.user.login, this.props.students)
+          .school;
       },
     },
     {
@@ -147,6 +142,16 @@ class HomeworkTable extends React.Component {
       zIndex: 0,
     },
   };
+
+  getStudentFromName(name, students) {
+    for (let i in students) {
+      if (students[i].githubName === name) {
+        return students[i];
+      }
+    }
+
+    return {};
+  }
 
   dateToString(a) {
     var months = [
