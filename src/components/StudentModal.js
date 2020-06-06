@@ -3,7 +3,6 @@ import { withRouter } from "react-router-dom";
 import Modal from "react-modal";
 import ProjectSpecs from "../config/ProjectSpecs";
 import cityConfig from "../config/CityConfig";
-import HomeworkTable from "../components/HomeworkTable";
 import StudentMentorComponent from "./StudentMentorComponent";
 
 class StudentModal extends React.Component {
@@ -164,7 +163,7 @@ class StudentModal extends React.Component {
           <br />
           Github Profile:{" "}
           <a
-            href={this.props.student.html_url}
+            href={"https://github.com/" + this.props.student.githubName}
             target="_blank"
             rel="noopener noreferrer"
           >

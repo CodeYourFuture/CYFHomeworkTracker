@@ -103,6 +103,7 @@ class AttendanceModal extends React.Component {
           {["Yes", "Late", "No"].map((attended) => {
             return (
               <div
+                key={studentName}
                 className="dropdown-item"
                 onClick={() => {
                   let state = {};
@@ -140,6 +141,7 @@ class AttendanceModal extends React.Component {
           {ModuleConfig.map((week) => {
             return (
               <div
+                key={week}
                 className="dropdown-item"
                 onClick={() => {
                   this.setState({ week: week });
