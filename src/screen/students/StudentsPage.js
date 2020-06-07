@@ -146,11 +146,11 @@ class StudentPage extends React.Component {
     });
   }
 
-  showUpdateAttendanceModal(login) {
+  showUpdateAttendanceModal(name) {
     this.setState({
       updateAttendanceModal: {
         show: true,
-        studentName: login,
+        studentName: name,
       },
     });
   }

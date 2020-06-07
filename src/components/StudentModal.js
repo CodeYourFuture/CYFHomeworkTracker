@@ -4,6 +4,7 @@ import Modal from "react-modal";
 import ProjectSpecs from "../config/ProjectSpecs";
 import cityConfig from "../config/CityConfig";
 import StudentMentorComponent from "./StudentMentorComponent";
+import HomeworkGraph from "./HomeworkGraph";
 
 class StudentModal extends React.Component {
   constructor(props) {
@@ -14,6 +15,7 @@ class StudentModal extends React.Component {
       studentNotes: [],
       educationBuddies: [],
       pdBuddies: [],
+      homework: [],
     };
   }
 
@@ -30,7 +32,7 @@ class StudentModal extends React.Component {
       return;
     }
 
-    this.getAverageHomeworkScore();
+    this.getHomework();
     this.setState({
       school: this.getSchoolFromName(this.props.student.school),
     });
@@ -105,10 +107,12 @@ class StudentModal extends React.Component {
     });
   }
 
-  getAverageHomeworkScore() {
+  getHomework() {
     this.props.studentRepo
       .getHomeworkForStudentByName(this.props.student.githubName)
       .then((result) => {
+        console.log(result);
+
         let total = 0;
 
         result.forEach((homework) => {
@@ -117,7 +121,7 @@ class StudentModal extends React.Component {
 
         let average = (total / result.length).toFixed(2);
 
-        this.setState({ averageHomeworkScore: average });
+        this.setState({ averageHomeworkScore: average, homework: result });
       });
   }
 
@@ -192,6 +196,9 @@ class StudentModal extends React.Component {
   getDetailsColumn() {
     return (
       <div className="container-fluid">
+        <h2 className="font-weight-light">Homework</h2>
+        <HomeworkGraph homework={this.state.homework} />
+        <hr />
         <h2 className="font-weight-light">Student Buddies</h2>
         <StudentMentorComponent
           educationBuddies={this.state.educationBuddies}
